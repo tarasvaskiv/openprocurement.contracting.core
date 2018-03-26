@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from openprocurement.contracting.api.utils import (
+from openprocurement.contracting.core.utils import (
     save_contract,
     contractingresource,
     apply_patch,
@@ -17,16 +17,18 @@ from openprocurement.api.validation import (
     validate_file_upload,
     validate_patch_document_data,
 )
-from openprocurement.contracting.api.validation import (
+from openprocurement.contracting.core.validation import (
     validate_add_document_to_active_change,
     validate_contract_document_operation_not_in_allowed_contract_status
 )
 
 
-@contractingresource(name='Contract Documents',
-                     collection_path='/contracts/{contract_id}/documents',
-                     path='/contracts/{contract_id}/documents/{document_id}',
-                     description="Contract related binary files (PDFs, etc.)")
+@contractingresource(
+    name='Contract Documents',
+    collection_path='/contracts/{contract_id}/documents',
+    path='/contracts/{contract_id}/documents/{document_id}',
+    description="Contract related binary files (PDFs, etc.)"
+)
 class ContractsDocumentResource(APIResource):
 
     @json_view(permission='view_contract')

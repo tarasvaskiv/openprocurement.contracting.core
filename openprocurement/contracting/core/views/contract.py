@@ -10,16 +10,21 @@ from openprocurement.api.utils import (
     error_handler
 )
 
-from openprocurement.contracting.api.utils import (
-    contractingresource, apply_patch, contract_serialize, set_ownership,
-    save_contract)
-from openprocurement.contracting.api.validation import (
+from openprocurement.contracting.core.utils import (
+    contractingresource,
+    apply_patch,
+    contract_serialize,
+    set_ownership,
+    save_contract
+)
+from openprocurement.contracting.core.validation import (
     validate_contract_data,
     validate_patch_contract_data,
     validate_credentials_generate,
     validate_contract_update_not_in_allowed_status,
-    validate_terminate_contract_without_amountPaid)
-from openprocurement.contracting.api.design import (
+    validate_terminate_contract_without_amountPaid
+)
+from openprocurement.contracting.core.design import (
     FIELDS,
     contracts_by_dateModified_view,
     contracts_real_by_dateModified_view,
@@ -47,9 +52,11 @@ FEED = {
 }
 
 
-@contractingresource(name='Contracts',
-                     path='/contracts',
-                     description="Contracts")
+@contractingresource(
+    name='Contracts',
+    path='/contracts',
+    description="Contracts"
+)
 class ContractsResource(APIResourceListing):
 
     def __init__(self, request, context):

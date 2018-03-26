@@ -9,10 +9,14 @@ from openprocurement.api.utils import (
     raise_operation_error
 )
 
-from openprocurement.contracting.api.utils import (
-    contractingresource, apply_patch, contract_serialize, set_ownership,
-    save_contract)
-from openprocurement.contracting.api.validation import (
+from openprocurement.contracting.core.utils import (
+    contractingresource,
+    apply_patch,
+    contract_serialize,
+    set_ownership,
+    save_contract
+)
+from openprocurement.contracting.core.validation import (
     validate_change_data,
     validate_patch_change_data,
     validate_create_contract_change,
@@ -22,10 +26,12 @@ from openprocurement.contracting.api.validation import (
 )
 
 
-@contractingresource(name='Contract changes',
-                     collection_path='/contracts/{contract_id}/changes',
-                     path='/contracts/{contract_id}/changes/{change_id}',
-                     description="Contracts Changes")
+@contractingresource(
+    name='Contract changes',
+    collection_path='/contracts/{contract_id}/changes',
+    path='/contracts/{contract_id}/changes/{change_id}',
+    description="Contracts Changes"
+)
 class ContractsChangesResource(APIResource):
     """ Contract changes resource """
 

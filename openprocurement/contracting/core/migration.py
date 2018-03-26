@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
 from openprocurement.api.utils import get_now
-from openprocurement.contracting.api.traversal import Root
-from openprocurement.contracting.api.models import Contract
+from openprocurement.contracting.core.traversal import Root
+from openprocurement.contracting.core.models import Contract
 
 LOGGER = logging.getLogger(__name__)
 SCHEMA_VERSION = 2

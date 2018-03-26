@@ -5,17 +5,25 @@ from logging import getLogger
 from cornice.resource import resource
 from schematics.exceptions import ModelValidationError
 from openprocurement.api.utils import (
-    error_handler, get_revision_changes, context_unpack, apply_data_patch,
-    generate_id, set_modetest_titles, get_now,
+    error_handler,
+    get_revision_changes,
+    context_unpack,
+    apply_data_patch,
+    generate_id,
+    set_modetest_titles,
+    get_now
 )
 from openprocurement.api.models import Revision
 
-from openprocurement.contracting.api.traversal import factory
-from openprocurement.contracting.api.models import Contract
+from openprocurement.contracting.core.traversal import factory
+from openprocurement.contracting.core.models import Contract
 
 
-contractingresource = partial(resource, error_handler=error_handler,
-                              factory=factory)
+contractingresource = partial(
+    resource,
+    error_handler=error_handler,
+    factory=factory
+)
 
 PKG = get_distribution(__package__)
 LOGGER = getLogger(PKG.project_name)

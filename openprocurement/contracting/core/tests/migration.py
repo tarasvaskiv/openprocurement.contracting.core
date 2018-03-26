@@ -6,14 +6,17 @@ import unittest
 from copy import deepcopy
 from openprocurement.tender.belowthreshold.models import Tender
 from openprocurement.api.utils import get_now
-from openprocurement.contracting.api.models import Contract
-from openprocurement.contracting.api.migration import (
+from openprocurement.contracting.core.models import Contract
+from openprocurement.contracting.core.migration import (
     migrate_data,
     get_db_schema_version,
     set_db_schema_version,
     SCHEMA_VERSION
 )
-from openprocurement.contracting.api.tests.base import test_contract_data, BaseWebTest
+from openprocurement.contracting.core.tests.base import (
+    test_contract_data,
+    BaseWebTest
+)
 
 
 class MigrateTest(BaseWebTest):
