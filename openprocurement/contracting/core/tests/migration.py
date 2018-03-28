@@ -18,7 +18,7 @@ from openprocurement.contracting.core.tests.base import (
     BaseWebTest
 )
 
-
+@unittest.skipIf(True, "Move to lower package")
 class MigrateTest(BaseWebTest):
 
     def setUp(self):

@@ -25,12 +25,12 @@ from openprocurement.contracting.core.tests.change_blanks import (
     date_signed_on_change_creation_for_very_old_contracts_data,
 )
 
-
+@unittest.skipIf(True, "Move to lower package")
 class ContractNoItemsChangeTest(BaseWebTest):
     initial_data = test_contract_data
     test_no_items_contract_change = snitch(no_items_contract_change)
 
-
+@unittest.skipIf(True, "Move to lower package")
 class ContractChangesResourceTest(BaseContractContentWebTest):
     initial_auth = ('Basic', ('broker', ''))
 

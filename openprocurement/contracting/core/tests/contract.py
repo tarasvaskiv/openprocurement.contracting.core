@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import unittest
 from copy import deepcopy
 
@@ -39,26 +40,99 @@ from openprocurement.contracting.core.tests.contract_blanks import (
 )
 
 
+class ContractResourceTest(BaseWebTest):
+    relative_to = os.path.dirname(__file__)
+
+    def test_empty_listing(self):
+        response = self.app.get('/contracts')
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data'], [])
+        self.assertNotIn('{\n    "', response.body)
+        self.assertNotIn('callback({', response.body)
+        self.assertEqual(response.json['next_page']['offset'], '')
+        self.assertNotIn('prev_page', response.json)
+
+        response = self.app.get('/contracts?opt_jsonp=callback')
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/javascript')
+        self.assertNotIn('{\n    "', response.body)
+        self.assertIn('callback({', response.body)
+
+        response = self.app.get('/contracts?opt_pretty=1')
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertIn('{\n    "', response.body)
+        self.assertNotIn('callback({', response.body)
+
+        response = self.app.get('/contracts?opt_jsonp=callback&opt_pretty=1')
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/javascript')
+        self.assertIn('{\n    "', response.body)
+        self.assertIn('callback({', response.body)
+
+        response = self.app.get('/contracts?offset=2015-01-01T00:00:00+02:00&descending=1&limit=10')
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data'], [])
+        self.assertIn('descending=1', response.json['next_page']['uri'])
+        self.assertIn('limit=10', response.json['next_page']['uri'])
+        self.assertNotIn('descending=1', response.json['prev_page']['uri'])
+        self.assertIn('limit=10', response.json['prev_page']['uri'])
+
+        response = self.app.get('/contracts?feed=changes')
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data'], [])
+        self.assertEqual(response.json['next_page']['offset'], '')
+        self.assertNotIn('prev_page', response.json)
+
+        response = self.app.get('/contracts?feed=changes&offset=0', status=404)
+        self.assertEqual(response.status, '404 Not Found')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['status'], 'error')
+        self.assertEqual(response.json['errors'], [
+            {u'description': u'Offset expired/invalid', u'location': u'params', u'name': u'offset'}
+        ])
+
+        response = self.app.get('/contracts?feed=changes&descending=1&limit=10')
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data'], [])
+        self.assertIn('descending=1', response.json['next_page']['uri'])
+        self.assertIn('limit=10', response.json['next_page']['uri'])
+        self.assertNotIn('descending=1', response.json['prev_page']['uri'])
+        self.assertIn('limit=10', response.json['prev_page']['uri'])
+
+
+def suite():
+    suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(ContractResourceTest))
+    return suite
+
+if __name__ == '__main__':
+    unittest.main(defaultTest='suite')
+
+@unittest.skipIf(True, "Move to lower package")
 class ContractTest(BaseWebTest):
     initial_data = test_contract_data
 
     test_simple_add_contract = snitch(simple_add_contract)
 
+# class ContractResourceTest(BaseWebTest):
+#     """ contract resource test """
+#     initial_data = test_contract_data
+# 
+#     test_empty_listing = snitch(empty_listing)
+#     test_listing = snitch(listing)
+#     test_listing_changes = snitch(listing_changes)
+#     test_get_contract = snitch(get_contract)
+#     test_not_found = snitch(not_found)
+#     test_create_contract_invalid = snitch(create_contract_invalid)
+#     test_create_contract_generated = snitch(create_contract_generated)
+#     test_create_contract = snitch(create_contract)
 
-class ContractResourceTest(BaseWebTest):
-    """ contract resource test """
-    initial_data = test_contract_data
-
-    test_empty_listing = snitch(empty_listing)
-    test_listing = snitch(listing)
-    test_listing_changes = snitch(listing_changes)
-    test_get_contract = snitch(get_contract)
-    test_not_found = snitch(not_found)
-    test_create_contract_invalid = snitch(create_contract_invalid)
-    test_create_contract_generated = snitch(create_contract_generated)
-    test_create_contract = snitch(create_contract)
-
-
+@unittest.skipIf(True, "Move to lower package")
 class ContractWDocumentsWithDSResourceTest(BaseWebTest):
     docservice = True
     initial_data = deepcopy(test_contract_data)
@@ -68,6 +142,7 @@ class ContractWDocumentsWithDSResourceTest(BaseWebTest):
     test_create_contract_w_documents = snitch(create_contract_w_documents)
 
 
+@unittest.skipIf(True, "Move to lower package")
 class ContractResource4BrokersTest(BaseContractWebTest):
     """ contract resource test """
     initial_auth = ('Basic', ('broker', ''))
@@ -81,6 +156,7 @@ test_contract_data_wo_items = deepcopy(test_contract_data)
 del test_contract_data_wo_items['items']
 
 
+@unittest.skipIf(True, "Move to lower package")
 class ContractWOItemsResource4BrokersTest(BaseContractWebTest):
     initial_data = test_contract_data_wo_items
     initial_auth = ('Basic', ('broker', ''))
@@ -121,6 +197,7 @@ class ContractWOItemsResource4BrokersTest(BaseContractWebTest):
         self.assertEqual(response.status, '403 Forbidden')
 
 
+@unittest.skipIf(True, "Move to lower package")
 class ContractResource4AdministratorTest(BaseContractWebTest):
     """ contract resource test """
     initial_auth = ('Basic', ('administrator', ''))
@@ -128,6 +205,7 @@ class ContractResource4AdministratorTest(BaseContractWebTest):
     test_contract_administrator_change = snitch(contract_administrator_change)
 
 
+@unittest.skipIf(True, "Move to lower package")
 class ContractCredentialsTest(BaseContractWebTest):
     """ Contract credentials tests """
 
@@ -137,7 +215,7 @@ class ContractCredentialsTest(BaseContractWebTest):
     test_get_credentials = snitch(get_credentials)
     test_generate_credentials = snitch(generate_credentials)
 
-
+@unittest.skipIf(True, "Move to lower package")
 class ContractWOItemsResource4BrokersTest(BaseContractWebTest):
     initial_data = test_contract_data_wo_items
     initial_auth = ('Basic', ('broker', ''))

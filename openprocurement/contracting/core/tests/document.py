@@ -17,7 +17,7 @@ from openprocurement.contracting.core.tests.document_blanks import (
     put_contract_document_json,
 )
 
-
+@unittest.skipIf(True, "Move to lower package")
 class ContractDocumentResourceTest(BaseContractContentWebTest):
     docservice = False
     initial_auth = ('Basic', ('broker', ''))
@@ -28,7 +28,7 @@ class ContractDocumentResourceTest(BaseContractContentWebTest):
     test_patch_contract_document = snitch(patch_contract_document)
     test_contract_change_document = snitch(contract_change_document)
 
-
+@unittest.skipIf(True, "Move to lower package")
 class ContractDocumentWithDSResourceTest(ContractDocumentResourceTest):
     docservice = True
 
