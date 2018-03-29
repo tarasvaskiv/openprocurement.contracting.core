@@ -23,7 +23,7 @@ api_requires = requires + [
 ]
 
 entry_points = {
-    'openprocurement.api.plugins': [
+    'openprocurement.contracting.api.plugins': [
         'contracting = openprocurement.contracting.core.includeme:includeme'
     ],
     'openprocurement.api.migrations': [

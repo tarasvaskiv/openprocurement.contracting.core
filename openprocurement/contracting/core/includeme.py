@@ -18,7 +18,7 @@ LOGGER = getLogger(PKG.project_name)
 
 
 def includeme(config):
-    LOGGER.info('Init contracting plugin.')
+    LOGGER.info('Init contracting.core plugin.')
     add_design()
     config.add_request_method(extract_contract, 'contract', reify=True)
 
