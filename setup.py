@@ -24,7 +24,7 @@ api_requires = requires + [
 
 entry_points = {
     'openprocurement.api.plugins': [
-        'contracting = openprocurement.contracting.core:includeme'
+        'contracting = openprocurement.contracting.core.includeme:includeme'
     ],
     'openprocurement.api.migrations': [
         'contracts = openprocurement.contracting.core.migration:migrate_data'
@@ -46,7 +46,7 @@ setup(name='openprocurement.contracting.core',
     author='Quintagroup, Ltd.',
     author_email='info@quintagroup.com',
     license='Apache License 2.0',
-    url='https://github.com/bdmbdsm/openprocurement.contracting.core',
+    url='https://github.com/openprocurement/openprocurement.contracting.core',
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['openprocurement', 'openprocurement.contracting'],
     include_package_data=True,
