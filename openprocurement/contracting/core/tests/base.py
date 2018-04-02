@@ -1,28 +1,18 @@
 # -*- coding: utf-8 -*-
 import json
 import os
-import unittest
-import webtest
-from base64 import b64encode
 from copy import deepcopy
-from datetime import datetime
-from requests.models import Response
-from urllib import urlencode
 from uuid import uuid4
 from webtest import TestApp
 
-from openprocurement.api.constants import VERSION, SESSION
 from openprocurement.api.utils import get_now
-from openprocurement.api.tests.base import BaseWebTest
-from openprocurement.api.utils import get_now, SESSION, apply_data_patch
-
 from openprocurement.contracting.api.tests.base import (
     BaseWebTest as BaseBaseWebTest
 )
 
-now = datetime.now()
 
 class DumpsTestAppwebtest(TestApp):
+    """ Class used for docs (move to common later?) """
     hostname = "api-sandbox.openprocurement.org"
 
     def do_request(self, req, status=None, expect_errors=None):
