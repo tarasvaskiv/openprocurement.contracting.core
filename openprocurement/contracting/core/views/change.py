@@ -8,9 +8,10 @@ from openprocurement.api.utils import (
     get_now,
     raise_operation_error
 )
-
-from openprocurement.contracting.core.utils import (
+from openprocurement.contracting.api.utils import (
     contractingresource,
+)
+from openprocurement.contracting.core.utils import (
     apply_patch,
     contract_serialize,
     set_ownership,

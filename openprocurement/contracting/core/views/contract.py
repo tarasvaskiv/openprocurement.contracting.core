@@ -9,11 +9,12 @@ from openprocurement.api.utils import (
     APIResourceListing,
     error_handler
 )
-
-from openprocurement.contracting.core.utils import (
+from openprocurement.contracting.api.utils import (
     contractingresource,
+    contract_serialize
+)
+from openprocurement.contracting.core.utils import (
     apply_patch,
-    contract_serialize,
     set_ownership,
     save_contract
 )

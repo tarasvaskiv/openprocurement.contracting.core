@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from openprocurement.contracting.api.utils import (
+    contractingresource,
+)
 from openprocurement.contracting.core.utils import (
     save_contract,
-    contractingresource,
     apply_patch,
 )
 from openprocurement.api.utils import (
