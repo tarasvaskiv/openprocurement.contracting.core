@@ -1,20 +1,9 @@
 # -*- coding: utf-8 -*-
-from pkg_resources import get_distribution
-from logging import getLogger
-from schematics.exceptions import ModelValidationError
 from openprocurement.api.utils import (
-    get_revision_changes,
-    context_unpack,
     apply_data_patch,
     generate_id,
-    set_modetest_titles,
-    get_now,
 )
-from openprocurement.api.models import Revision
-
-
-PKG = get_distribution(__package__)
-LOGGER = getLogger(PKG.project_name)
+from openprocurement.contracting.api.utils import save_contract
 
 
 class isContract(object):
@@ -45,40 +34,6 @@ def register_contract_contractType(config, model):
     """
     contract_type = model.contractType.default or 'common'
     config.registry.contract_contractTypes[contract_type] = model
-
-
-def save_contract(request):
-    """ Save contract object to database
-    :param request:
-    :return: True if Ok
-    """
-    contract = request.validated['contract']
-
-    if contract.mode == u'test':
-        set_modetest_titles(contract)
-    patch = get_revision_changes(contract.serialize("plain"),
-                                 request.validated['contract_src'])
-    if patch:
-        contract.revisions.append(
-            Revision({'author': request.authenticated_userid,
-                      'changes': patch, 'rev': contract.rev}))
-        old_date_modified = contract.dateModified
-        contract.dateModified = get_now()
-        try:
-            contract.store(request.registry.db)
-        except ModelValidationError, e:  # pragma: no cover
-            for i in e.message:
-                request.errors.add('body', i, e.message[i])
-            request.errors.status = 422
-        except Exception, e:  # pragma: no cover
-            request.errors.add('body', 'data', str(e))
-        else:
-            LOGGER.info('Saved contract {}: dateModified {} -> {}'.format(
-                contract.id, old_date_modified and old_date_modified.isoformat(),
-                contract.dateModified.isoformat()),
-                extra=context_unpack(request, {'MESSAGE_ID': 'save_contract'},
-                                     {'CONTRACT_REV': contract.rev}))
-            return True
 
 
 def apply_patch(request, data=None, save=True, src=None):
