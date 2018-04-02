@@ -88,6 +88,10 @@ class MigrateTest(BaseWebTest):
         self.assertIn('KeyID=', migrated_item['documents'][0]['url'])
         self.assertIn('Signature=', migrated_item['documents'][0]['url'])
 
+    def test_migrate_data_return_none(self):
+        self.app.app.registry.settings['plugins'] = 'fake_plugin'
+        self.assertIsNone(migrate_data(self.app.app.registry))
+
 
 def suite():
     suite = unittest.TestSuite()
