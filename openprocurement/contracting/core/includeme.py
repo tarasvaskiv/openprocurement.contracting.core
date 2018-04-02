@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 from logging import getLogger
 from pkg_resources import get_distribution, iter_entry_points
+from pyramid.interfaces import IRequest
 
 from openprocurement.contracting.core.utils import (
-    contract_from_data,
-    extract_contract,
     isContract,
-    SubscribersPicker,
-    register_contractType
+    register_contract_contractType
 )
-from openprocurement.contracting.core.design import add_design
+from openprocurement.api.interfaces import IContentConfigurator
+from openprocurement.contracting.core.models import IContract
+from openprocurement.contracting.core.adapters import ContractConfigurator
 
 
 PKG = get_distribution(__package__)
@@ -19,21 +19,14 @@ LOGGER = getLogger(PKG.project_name)
 
 def includeme(config):
     LOGGER.info('Init contracting.core plugin.')
-    add_design()
-    config.add_request_method(extract_contract, 'contract', reify=True)
-
     # contractType plugins support
     config.registry.contract_contractTypes = {}
     config.add_route_predicate('contractType', isContract)
-    config.add_subscriber_predicate('contractType', SubscribersPicker)
-    config.add_request_method(contract_from_data)
-    config.add_directive('add_contractType',
-                         register_contractType)
+    config.add_directive('add_contract_contractType',
+                         register_contract_contractType)
     config.scan("openprocurement.contracting.core.views")
-    # TODO: we need adapters later
-    # config.scan("openprocurement.contract.core.subscribers")
-    # config.registry.registerAdapter(TenderConfigurator, (ITender, IRequest),
-    #                                 IContentConfigurator)
+    config.registry.registerAdapter(ContractConfigurator, (IContract, IRequest),
+                                    IContentConfigurator)
 
 
     # search for plugins
