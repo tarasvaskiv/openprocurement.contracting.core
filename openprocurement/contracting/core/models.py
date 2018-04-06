@@ -35,7 +35,7 @@ contract_create_role = (whitelist(
 
 contract_edit_role = (whitelist(
     'title', 'title_en', 'title_ru', 'description', 'description_en',
-    'description_ru', 'status', 'period', 'value' , 'items', 'amountPaid',
+    'description_ru', 'status', 'period', 'value', 'items', 'amountPaid',
     'terminationDetails', 'contract_amountPaid',
 ))
 
@@ -125,15 +125,17 @@ class Item(BaseItem):
         }
 
     classification = ModelType(CPVClassification, required=True)
-    additionalClassifications =  ListType(ModelType(AdditionalClassification, default=list()))
+    additionalClassifications = ListType(ModelType(AdditionalClassification, default=list()))
 
 
 class Change(Model):
     class Options:
         roles = {
             # 'edit': blacklist('id', 'date'),
-            'create': whitelist('rationale', 'rationale_ru', 'rationale_en', 'rationaleTypes', 'contractNumber', 'dateSigned'),
-            'edit': whitelist('rationale', 'rationale_ru', 'rationale_en', 'rationaleTypes', 'contractNumber', 'status', 'dateSigned'),
+            'create': whitelist('rationale', 'rationale_ru', 'rationale_en',
+                                'rationaleTypes', 'contractNumber', 'dateSigned'),
+            'edit': whitelist('rationale', 'rationale_ru', 'rationale_en',
+                              'rationaleTypes', 'contractNumber', 'status', 'dateSigned'),
             'view': schematics_default_role,
             'embedded': schematics_embedded_role,
         }
@@ -172,7 +174,9 @@ class Contract(SchematicsDocument, BaseContract):
     mode = StringType(choices=['test'])
     status = StringType(choices=['terminated', 'active'], default='active')
     suppliers = ListType(ModelType(Organization), min_size=1, max_size=1)
-    procuringEntity = ModelType(ProcuringEntity, required=True)  # The entity managing the procurement, which may be different from the buyer who is paying / using the items being procured.
+    # The entity managing the procurement, which may be different from the buyer
+    # who is paying / using the items being procured.
+    procuringEntity = ModelType(ProcuringEntity, required=True)
     changes = ListType(ModelType(Change), default=list())
     documents = ListType(ModelType(Document), default=list())
     amountPaid = ModelType(Value)
@@ -238,4 +242,3 @@ class Contract(SchematicsDocument, BaseContract):
             return Value(dict(amount=self.amountPaid.amount,
                               currency=self.value.currency,
                               valueAddedTaxIncluded=self.value.valueAddedTaxIncluded))
-

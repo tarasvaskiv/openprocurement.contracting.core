@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-import json
 import os
 from copy import deepcopy
 from uuid import uuid4
-from webtest import TestApp
 
 from openprocurement.api.utils import get_now
 from openprocurement.contracting.api.tests.base import (
@@ -11,76 +9,39 @@ from openprocurement.contracting.api.tests.base import (
 )
 
 
-class DumpsTestAppwebtest(TestApp):
-    """ Class used for docs (move to common later?) """
-    hostname = "api-sandbox.openprocurement.org"
-
-    def do_request(self, req, status=None, expect_errors=None):
-        req.headers.environ["HTTP_HOST"] = self.hostname
-        if hasattr(self, 'file_obj') and not self.file_obj.closed:
-            self.file_obj.write(req.as_bytes(True))
-            self.file_obj.write("\n")
-            if req.body:
-                try:
-                    self.file_obj.write(
-                            'DATA:\n' + json.dumps(json.loads(req.body), indent=2, ensure_ascii=False).encode('utf8'))
-                    self.file_obj.write("\n")
-                except:
-                    pass
-            self.file_obj.write("\n")
-        resp = super(DumpsTestAppwebtest, self).do_request(req, status=status, expect_errors=expect_errors)
-        if hasattr(self, 'file_obj') and not self.file_obj.closed:
-            headers = [(n.title(), v)
-                       for n, v in resp.headerlist
-                       if n.lower() != 'content-length']
-            headers.sort()
-            self.file_obj.write(str('Response: %s\n%s\n') % (
-                resp.status,
-                str('\n').join([str('%s: %s') % (n, v) for n, v in headers]),
-            ))
-
-            if resp.testbody:
-                try:
-                    self.file_obj.write(json.dumps(json.loads(resp.testbody), indent=2, ensure_ascii=False).encode('utf8'))
-                except:
-                    pass
-            self.file_obj.write("\n\n")
-        return resp
-
-
 test_contract_data = {
     u"items": [
         {
-        u"description": u"футляри до державних нагород",
-        u"classification": {
-                        u"scheme": u"CPV",
-                        u"description": u"Cartons",
-                        u"id": u"44617100-9"
-                    },
-        u"additionalClassifications": [
-                        {
-                                        u"scheme": u"ДКПП",
-                                        u"id": u"17.21.1",
-                                        u"description": u"папір і картон гофровані, паперова й картонна тара"
-                                    }
-                    ],
-        u"deliveryAddress": {
-                        u"postalCode": u"79000",
-                        u"countryName": u"Україна",
-                        u"streetAddress": u"вул. Банкова 1",
-                        u"region": u"м. Київ",
-                        u"locality": u"м. Київ"
-                    },
-        u"deliveryDate": {
-                        u"startDate": u"2016-03-20T18:47:47.136678+02:00",
-                        u"endDate": u"2016-03-23T18:47:47.136678+02:00"
-                    },
-        u"id": u"c6c6e8ed4b1542e4bf13d3f98ec5ab59",
-        u"unit": {
-            u"code": u"44617100-9",
-            u"name": u"item"
-        },
-        u"quantity": 5
+            u"description": u"футляри до державних нагород",
+            u"classification": {
+                u"scheme": u"CPV",
+                u"description": u"Cartons",
+                u"id": u"44617100-9"
+            },
+            u"additionalClassifications": [
+                {
+                    u"scheme": u"ДКПП",
+                    u"id": u"17.21.1",
+                    u"description": u"папір і картон гофровані, паперова й картонна тара"
+                }
+            ],
+            u"deliveryAddress": {
+                u"postalCode": u"79000",
+                u"countryName": u"Україна",
+                u"streetAddress": u"вул. Банкова 1",
+                u"region": u"м. Київ",
+                u"locality": u"м. Київ"
+            },
+            u"deliveryDate": {
+                u"startDate": u"2016-03-20T18:47:47.136678+02:00",
+                u"endDate": u"2016-03-23T18:47:47.136678+02:00"
+            },
+            u"id": u"c6c6e8ed4b1542e4bf13d3f98ec5ab59",
+            u"unit": {
+                u"code": u"44617100-9",
+                u"name": u"item"
+            },
+            u"quantity": 5
         }
     ],
     u"procuringEntity": {
@@ -104,36 +65,36 @@ test_contract_data = {
     },
     u"suppliers": [
         {
-        u"contactPoint": {
-            u"email": u"aagt@gmail.com",
-            u"telephone": u"+380 (322) 91-69-30",
-            u"name": u"Андрій Олексюк"
-        },
-        u"identifier": {
-            u"scheme": u"UA-EDR",
-            u"id": u"00137226",
-            u"uri": u"http://www.sc.gov.ua/"
-        },
-        u"name": u"ДКП «Книга»",
-        u"address": {
-                    u"postalCode": u"79013",
-                    u"countryName": u"Україна",
-                    u"streetAddress": u"вул. Островського, 34",
-                    u"region": u"м. Львів",
-                    u"locality": u"м. Львів"
-                    }
+            u"contactPoint": {
+                u"email": u"aagt@gmail.com",
+                u"telephone": u"+380 (322) 91-69-30",
+                u"name": u"Андрій Олексюк"
+            },
+            u"identifier": {
+                u"scheme": u"UA-EDR",
+                u"id": u"00137226",
+                u"uri": u"http://www.sc.gov.ua/"
+            },
+            u"name": u"ДКП «Книга»",
+            u"address": {
+                u"postalCode": u"79013",
+                u"countryName": u"Україна",
+                u"streetAddress": u"вул. Островського, 34",
+                u"region": u"м. Львів",
+                u"locality": u"м. Львів"
+            }
         }
     ],
     u"contractNumber": u"contract #13111",
     u"period": {
-                u"startDate": u"2016-03-18T18:47:47.155143+02:00",
-                u"endDate": u"2017-03-18T18:47:47.155143+02:00"
-            },
+        u"startDate": u"2016-03-18T18:47:47.155143+02:00",
+        u"endDate": u"2017-03-18T18:47:47.155143+02:00"
+    },
     u"value": {
         u"currency": u"UAH",
         u"amount": 238.0,
         u"valueAddedTaxIncluded": True
-        },
+    },
     u"dateSigned": get_now().isoformat(),
     u"awardID": u"8481d7eb01694c25b18658036c236c5d",
     u"id": uuid4().hex,

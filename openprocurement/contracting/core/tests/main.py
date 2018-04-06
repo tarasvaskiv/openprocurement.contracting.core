@@ -7,7 +7,6 @@ from pyramid.request import Request
 from openprocurement.contracting.core.adapters import ContractConfigurator
 from openprocurement.contracting.core.models import Contract
 from openprocurement.contracting.core.includeme import includeme
-from openprocurement.contracting.core.utils import isContract
 from openprocurement.api.interfaces import IContentConfigurator
 
 

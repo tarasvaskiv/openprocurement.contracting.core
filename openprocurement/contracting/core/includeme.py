@@ -28,7 +28,6 @@ def includeme(config):
     config.registry.registerAdapter(ContractConfigurator, (IContract, IRequest),
                                     IContentConfigurator)
 
-
     # search for plugins
     settings = config.get_settings()
     plugins = settings.get('plugins') and settings['plugins'].split(',')
