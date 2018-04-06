@@ -27,7 +27,8 @@ def migrate_data(registry, destination=None):
     if cur_version == SCHEMA_VERSION:
         return cur_version
     for step in xrange(cur_version, destination or SCHEMA_VERSION):
-        LOGGER.info("Migrate openprocurement contracts schema from {} to {}".format(step, step + 1), extra={'MESSAGE_ID': 'migrate_data'})
+        LOGGER.info("Migrate openprocurement contracts schema from {} to {}".
+                    format(step, step + 1), extra={'MESSAGE_ID': 'migrate_data'})
         migration_func = globals().get('from{}to{}'.format(step, step + 1))
         if migration_func:
             migration_func(registry)
@@ -48,7 +49,8 @@ def from0to1(registry):
 
             rel_award = [aw for aw in tender_doc['awards'] if aw['id'] == doc['awardID']]
             if not rel_award:
-                LOGGER.warn("Related award {} for contract {} not found!".format(doc['awardID'], doc['id']), extra={'MESSAGE_ID': 'migrate_data'})
+                LOGGER.warn("Related award {} for contract {} not found!".
+                            format(doc['awardID'], doc['id']), extra={'MESSAGE_ID': 'migrate_data'})
                 continue
             rel_award = rel_award[0]
 

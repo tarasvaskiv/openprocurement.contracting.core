@@ -18,11 +18,13 @@ def validate_change_data(request):
 def validate_patch_change_data(request):
     return validate_data(request, Change, True)
 
+
 # changes
 def validate_contract_change_add_not_in_allowed_contract_status(request):
     contract = request.validated['contract']
     if contract.status != 'active':
-        raise_operation_error(request, 'Can\'t add contract change in current ({}) contract status'.format(contract.status))
+        raise_operation_error(request, 'Can\'t add contract change in current ({}) contract status'.
+                              format(contract.status))
 
 
 def validate_create_contract_change(request):
@@ -36,10 +38,12 @@ def validate_contract_change_update_not_in_allowed_change_status(request):
     if change.status == 'active':
         raise_operation_error(request, 'Can\'t update contract change in current ({}) status'.format(change.status))
 
+
 def validate_update_contract_change_status(request):
     data = request.validated['data']
     if not data.get("dateSigned", ''):
         raise_operation_error(request, 'Can\'t update contract change status. \'dateSigned\' is required.')
+
 
 # contract
 def validate_contract_update_not_in_allowed_status(request):
@@ -57,12 +61,15 @@ def validate_terminate_contract_without_amountPaid(request):
 def validate_credentials_generate(request):
     contract = request.validated['contract']
     if contract.status != "active":
-        raise_operation_error(request, 'Can\'t generate credentials in current ({}) contract status'.format(contract.status))
+        raise_operation_error(request, 'Can\'t generate credentials in current ({}) contract status'.
+                              format(contract.status))
+
 
 # contract document
 def validate_contract_document_operation_not_in_allowed_contract_status(request):
     if request.validated['contract'].status != 'active':
-        raise_operation_error(request, 'Can\'t {} document in current ({}) contract status'.format(OPERATIONS.get(request.method), request.validated['contract'].status))
+        raise_operation_error(request, 'Can\'t {} document in current ({}) contract status'.
+                              format(OPERATIONS.get(request.method), request.validated['contract'].status))
 
 
 def validate_add_document_to_active_change(request):
