@@ -182,8 +182,6 @@ class Contract(SchematicsDocument, BaseContract):
     amountPaid = ModelType(Value)
     terminationDetails = StringType()
 
-    create_accreditation = 3  # TODO
-
     class Options:
         roles = {
             'plain': plain_role,

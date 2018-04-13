@@ -7,3 +7,5 @@ class ContractConfigurator(ContentConfigurator):
 
     name = "Contract Configurator"
     model = None
+
+    create_accreditation = 3
